@@ -203,9 +203,10 @@
 
 // rtext: Configuration values
 //------------------------------------------------------------------------------------
-#define MAX_TEXT_BUFFER_LENGTH       1024       // Size of internal static buffers used on some functions:
+#define MAX_TEXT_BUFFER_LENGTH          4096    // Size of internal static buffers used on some functions:
                                                 // TextFormat(), TextSubtext(), TextToUpper(), TextToLower(), TextToPascal(), TextSplit()
-#define MAX_TEXTSPLIT_COUNT           128       // Maximum number of substrings to split: TextSplit()
+#define MAX_TEXTFORMAT_BUFFERS          10
+#define MAX_TEXTSPLIT_COUNT             128     // Maximum number of substrings to split: TextSplit()
 
 
 //------------------------------------------------------------------------------------
