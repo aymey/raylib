@@ -1123,7 +1123,7 @@ Image GenImagePerlinNoise(int width, int height, int offsetX, int offsetY, float
             // Apply aspect ratio compensation to wider side
             if (width > height) nx *= aspectRatio;
             else ny /= aspectRatio;
-            
+
             // Basic perlin noise implementation (not used)
             //float p = (stb_perlin_noise3(nx, ny, 0.0f, 0, 0, 0);
 
@@ -4329,6 +4329,37 @@ RenderTexture2D LoadRenderTexture(int width, int height)
         // Attach color texture and depth renderbuffer/texture to FBO
         rlFramebufferAttach(target.id, target.texture.id, RL_ATTACHMENT_COLOR_CHANNEL0, RL_ATTACHMENT_TEXTURE2D, 0);
         rlFramebufferAttach(target.id, target.depth.id, RL_ATTACHMENT_DEPTH, RL_ATTACHMENT_RENDERBUFFER, 0);
+
+        // Check if fbo is complete with attachments (valid)
+        if (rlFramebufferComplete(target.id)) TRACELOG(LOG_INFO, "FBO: [ID %i] Framebuffer object created successfully", target.id);
+
+        rlDisableFramebuffer();
+    }
+    else TRACELOG(LOG_WARNING, "FBO: Framebuffer object can not be created");
+
+    return target;
+}
+
+// like LoadRenderTexture but does not have a depth RenderBuffer
+RenderTexture2D LoadColorRenderTexture(int width, int height)
+{
+    RenderTexture2D target = { 0 };
+
+    target.id = rlLoadFramebuffer(); // Load an empty framebuffer
+
+    if (target.id > 0)
+    {
+        rlEnableFramebuffer(target.id);
+
+        // Create color texture (default to RGBA)
+        target.texture.id = rlLoadTexture(NULL, width, height, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 1);
+        target.texture.width = width;
+        target.texture.height = height;
+        target.texture.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
+        target.texture.mipmaps = 1;
+
+        // Attach color texture and depth renderbuffer/texture to FBO
+        rlFramebufferAttach(target.id, target.texture.id, RL_ATTACHMENT_COLOR_CHANNEL0, RL_ATTACHMENT_TEXTURE2D, 0);
 
         // Check if fbo is complete with attachments (valid)
         if (rlFramebufferComplete(target.id)) TRACELOG(LOG_INFO, "FBO: [ID %i] Framebuffer object created successfully", target.id);
