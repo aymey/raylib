@@ -269,6 +269,17 @@ void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color)
     }
 }
 
+// Draw a line with a color gradient
+void DrawLineGradient(Vector2 startPos, Vector2 endPos, float thick, Color startColor, Color endColor) {
+    rlBegin(RL_LINES);
+        rlColor4ub(startColor.r, startColor.g, startColor.b, startColor.a);
+        rlVertex2f(startPos.x, startPos.y);
+
+        rlColor4ub(endColor.r, endColor.g, endColor.b, endColor.a);
+        rlVertex2f(endPos.x, endPos.y);
+    rlEnd();
+}
+
 // Draw a color-filled circle
 void DrawCircle(int centerX, int centerY, float radius, Color color)
 {
