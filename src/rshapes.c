@@ -193,7 +193,7 @@ void DrawLineV(Vector2 startPos, Vector2 endPos, Color color)
     rlEnd();
 }
 
-// Draw lines sequuence (using gl lines)
+// Draw lines sequence (using gl lines)
 void DrawLineStrip(const Vector2 *points, int pointCount, Color color)
 {
     if (pointCount < 2) return; // Security check
@@ -204,6 +204,25 @@ void DrawLineStrip(const Vector2 *points, int pointCount, Color color)
         for (int i = 0; i < pointCount - 1; i++)
         {
             rlVertex2f(points[i].x, points[i].y);
+            rlVertex2f(points[i + 1].x, points[i + 1].y);
+        }
+    rlEnd();
+}
+
+// Draw lines sequence with a gradient (using gl lines)
+void DrawLineStripGradient(const Vector2 *points, int pointCount, Color startColor, Color endColor)
+{
+    if (pointCount < 2) return; // Security check
+
+    Color color = startColor;
+    rlBegin(RL_LINES);
+        for (int i = 0; i < pointCount - 1; i++)
+        {
+            rlColor4ub(color.r, color.g, color.b, color.a);
+            rlVertex2f(points[i].x, points[i].y);
+
+            color = ColorLerp(startColor, endColor, (1.0f + (float)i)/pointCount);
+            rlColor4ub(color.r, color.g, color.b, color.a);
             rlVertex2f(points[i + 1].x, points[i + 1].y);
         }
     rlEnd();
